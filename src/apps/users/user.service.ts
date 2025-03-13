@@ -1,6 +1,7 @@
 import { KnexService } from '../../database/knex.service';
 import { Injectable } from '@nestjs/common';
 import { UserModel } from './user.model';
+import { CreateUserDto } from './dto/create-user.dto';
 
 @Injectable()
 export class UserService {
@@ -19,8 +20,8 @@ export class UserService {
         return this.userModel.findById(id);
     }
 
-    async createUser(name: string, email: string) {
-        return this.userModel.create({ name, email });
+    async createUser(createUserDto: CreateUserDto) {
+        return this.userModel.create(createUserDto);
     }
 
     async updateUser(id: number, name: string) {
@@ -30,4 +31,14 @@ export class UserService {
     async deleteUser(id: number) {
         return this.userModel.delete(id);
     }
+
+    // can create more from base-model ตรงนี้
+    async findByEmail(email: string) {
+        return this.knexService.getKnex()('users').where({ email }).first();
+    }
+
+    async findByUsername(username: string) {
+        return this.knexService.getKnex()('users').where({ username }).first();
+    }
+
 }
