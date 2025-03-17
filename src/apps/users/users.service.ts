@@ -1,6 +1,7 @@
+import { AuthService } from './../auth/auth.service';
 import { KnexService } from '../../database/knex.service';
 import { Injectable } from '@nestjs/common';
-import { UserModel } from './user.model';
+import { UserModel } from './users.model';
 import { CreateUserDto } from './dto/create-user.dto';
 
 @Injectable()
@@ -8,7 +9,10 @@ export class UserService {
 
     private userModel: UserModel;
 
-    constructor(private readonly knexService: KnexService) {
+    constructor(
+        private readonly knexService: KnexService,
+        public authService: AuthService
+    ) {
         this.userModel = new UserModel(this.knexService);
     }
 
@@ -21,7 +25,15 @@ export class UserService {
     }
 
     async createUser(createUserDto: CreateUserDto) {
-        return this.userModel.create(createUserDto);
+
+        const hashPassword = await this.authService.hashPassword(createUserDto.password);
+
+        const data = {
+            ...createUserDto,
+            password: hashPassword
+        }
+
+        return this.userModel.create(data);
     }
 
     async updateUser(id: number, name: string) {

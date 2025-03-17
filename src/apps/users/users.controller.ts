@@ -1,8 +1,9 @@
-import { BadRequestException, Body, Controller, Get, HttpException, Param, Post } from '@nestjs/common';
-import { UserService } from './user.service';
+import { BadRequestException, Body, Controller, Get, HttpException, Param, Post, Req, UseGuards } from '@nestjs/common';
+import { UserService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UserResponseDto } from './dto/user-response.dto';
 import { plainToInstance } from 'class-transformer';
+import { JwtAuthGuard } from '../auth/guards/jwt.guard';
 
 @Controller('users')
 export class UsersController {
@@ -42,5 +43,11 @@ export class UsersController {
         } catch (error) {
             throw new BadRequestException(error.message)
         }
+    }
+
+    @Get('/profile/me')
+    @UseGuards(JwtAuthGuard)
+    async getProfile(@Req() req) {
+        return '1111';
     }
 }
