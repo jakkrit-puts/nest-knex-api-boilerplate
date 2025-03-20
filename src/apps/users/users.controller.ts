@@ -49,7 +49,7 @@ export class UsersController {
     }
 
     @UseGuards(JwtAuthGuard, RolesGuard)
-    @Roles(RoleUser.MANAGER)
+    @Roles(RoleUser.MEMBER)
     @Get('/profile/me')
     async getProfile(@Req() req) {
         return '1111';
