@@ -39,9 +39,11 @@ export class AuthService {
     }
 
 
-    const payload = { sub: user.id, email: user.email };
-    const accessToken = this.jwtService.sign(payload, { expiresIn: '15m' });
-    const refreshToken = this.jwtService.sign(payload, { expiresIn: '7d' });
+    const payloadAccessToken = { sub: user.id, email: user.email, role: user.role };
+    const payloadRefreshToken = { sub: user.id };
+
+    const accessToken = this.jwtService.sign(payloadAccessToken, { expiresIn: '15m' });
+    const refreshToken = this.jwtService.sign(payloadRefreshToken, { expiresIn: '7d' });
 
     // Store refresh token in Redis with a 7-day expiry
     await this.redisService.set(`refresh_${user.id}`, refreshToken, 7 * 24 * 60 * 60);
@@ -56,13 +58,20 @@ export class AuthService {
       throw new UnauthorizedException('Invalid refresh token');
     }
 
-    const payload = { sub: userId };
-    const newAccessToken = this.jwtService.sign(payload, { expiresIn: '15m' });
-    const newRefreshToken = this.jwtService.sign(payload, { expiresIn: '7d' });
 
-    await this.redisService.set(`refresh_${userId}`, newRefreshToken, 7 * 24 * 60 * 60);
+    const user = await this.userService.getUserById(Number(userId));
 
-    return { accessToken: newAccessToken, refreshToken: newRefreshToken };
+    if (user) {
+      const payloadAccessToken = { sub: user.id, email: user.email, role: user.role };
+      const payloadRefreshToken = { sub: user.id };
+
+      const newAccessToken = this.jwtService.sign(payloadAccessToken, { expiresIn: '15m' });
+      const newRefreshToken = this.jwtService.sign(payloadRefreshToken, { expiresIn: '7d' });
+
+      await this.redisService.set(`refresh_${userId}`, newRefreshToken, 7 * 24 * 60 * 60);
+
+      return { accessToken: newAccessToken, refreshToken: newRefreshToken };
+    }
   }
 
   async logout(userId: string) {
