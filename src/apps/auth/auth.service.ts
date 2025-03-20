@@ -42,8 +42,8 @@ export class AuthService {
     const payloadAccessToken = { sub: user.id, email: user.email, role: user.role };
     const payloadRefreshToken = { sub: user.id };
 
-    const accessToken = this.jwtService.sign(payloadAccessToken, { expiresIn: '15m' });
-    const refreshToken = this.jwtService.sign(payloadRefreshToken, { expiresIn: '7d' });
+    const accessToken = this.jwtService.sign(payloadAccessToken, { expiresIn: `${process.env.EXP_ACCESS_TOKEN}` });
+    const refreshToken = this.jwtService.sign(payloadRefreshToken, { expiresIn: `${process.env.EXP_REFRESH_TOKEN}` });
 
     // Store refresh token in Redis with a 7-day expiry
     await this.redisService.set(`refresh_${user.id}`, refreshToken, 7 * 24 * 60 * 60);
@@ -65,8 +65,8 @@ export class AuthService {
       const payloadAccessToken = { sub: user.id, email: user.email, role: user.role };
       const payloadRefreshToken = { sub: user.id };
 
-      const newAccessToken = this.jwtService.sign(payloadAccessToken, { expiresIn: '15m' });
-      const newRefreshToken = this.jwtService.sign(payloadRefreshToken, { expiresIn: '7d' });
+      const newAccessToken = this.jwtService.sign(payloadAccessToken, { expiresIn: `${process.env.EXP_ACCESS_TOKEN}` });
+      const newRefreshToken = this.jwtService.sign(payloadRefreshToken, { expiresIn: `${process.env.EXP_REFRESH_TOKEN}` });
 
       await this.redisService.set(`refresh_${userId}`, newRefreshToken, 7 * 24 * 60 * 60);
 
