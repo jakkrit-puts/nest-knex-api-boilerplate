@@ -4,6 +4,9 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UserResponseDto } from './dto/user-response.dto';
 import { plainToInstance } from 'class-transformer';
 import { JwtAuthGuard } from '../auth/guards/jwt.guard';
+import { RolesGuard } from 'src/utils/guards/roles.guard';
+import { Roles } from 'src/utils/decorators/roles.decorator';
+import { RoleUser } from 'src/common/roles.enum';
 
 @Controller('users')
 export class UsersController {
@@ -45,8 +48,9 @@ export class UsersController {
         }
     }
 
+    @UseGuards(JwtAuthGuard, RolesGuard)
+    @Roles(RoleUser.MANAGER)
     @Get('/profile/me')
-    @UseGuards(JwtAuthGuard)
     async getProfile(@Req() req) {
         return '1111';
     }

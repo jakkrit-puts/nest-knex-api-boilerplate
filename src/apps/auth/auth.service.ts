@@ -39,7 +39,7 @@ export class AuthService {
     }
 
 
-    const payloadAccessToken = { sub: user.id, email: user.email, role: user.role };
+    const payloadAccessToken = { sub: user.id, email: user.email, roles: user.role };
     const payloadRefreshToken = { sub: user.id };
 
     const accessToken = this.jwtService.sign(payloadAccessToken, { expiresIn: `${process.env.EXP_ACCESS_TOKEN}` });
@@ -62,7 +62,7 @@ export class AuthService {
     const user = await this.userService.getUserById(Number(userId));
 
     if (user) {
-      const payloadAccessToken = { sub: user.id, email: user.email, role: user.role };
+      const payloadAccessToken = { sub: user.id, email: user.email, roles: user.role };
       const payloadRefreshToken = { sub: user.id };
 
       const newAccessToken = this.jwtService.sign(payloadAccessToken, { expiresIn: `${process.env.EXP_ACCESS_TOKEN}` });
