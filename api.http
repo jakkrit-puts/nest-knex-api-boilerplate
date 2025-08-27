@@ -1,0 +1,25 @@
+@BASE_API=http://localhost:3000
+
+###
+GET  {{BASE_API}}
+Content-Type: application/json
+
+### POST /api/users/register
+POST {{BASE_API}}/users/register
+Content-Type: application/json
+
+{
+  "name":"jk",
+  "email": "jk@gmail.com",
+  "username": "jk",
+  "password": "Aa112233"
+}
+
+### POST /api/auth/login
+POST {{BASE_API}}/auth/login
+Content-Type: application/json
+
+{
+  "username": "jk",
+  "password": "Aa112233"
+}
