@@ -10,8 +10,8 @@ Content-Type: application/json
 
 {
   "name":"jk",
-  "email": "jk@gmail.com",
-  "username": "jk",
+  "email": "jk2@gmail.com",
+  "username": "jk2",
   "password": "Aa112233"
 }
 
@@ -20,6 +20,16 @@ POST {{BASE_API}}/auth/login
 Content-Type: application/json
 
 {
-  "username": "jk",
+  "username": "jk2",
   "password": "Aa112233"
 }
+
+### POST /api/auth/refresh
+POST {{BASE_API}}/auth/refresh
+Content-Type: application/json
+
+{
+  "userId": "2",
+  "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjIsImlhdCI6MTc1NjMyNzY4NCwiZXhwIjoxNzU2OTMyNDg0fQ.Z6Yyp_g6VBafa48V0uFSGsUeyoW_tSlSDXYWjITnBQ8"
+}
+
